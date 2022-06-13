@@ -1,15 +1,40 @@
-import { Text, useSx, View, H1, P, Row, A } from 'dripsy'
-import { TextLink } from 'solito/link'
-import { MotiLink } from 'solito/moti'
+import PrimaryButton from 'app/components/PrimaryButton'
+import { useSx, View } from 'dripsy'
+import { Audio } from 'expo-av'
+import { useEffect, useState } from 'react'
+import { Button } from 'react-native'
 
 export function HomeScreen() {
+  const [sound, setSound] = useState()
   const sx = useSx()
-  
+  async function playSound() {
+    console.log('Loading Sound')
+    const { sound } = await Audio.Sound.createAsync(
+      require('../../../../assets/audio/1.mp3')
+    )
+    setSound(sound)
+
+    console.log('Playing Sound')
+    await sound.setStatusAsync({ shouldPlay: true })
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound')
+          sound.unloadAsync()
+        }
+      : undefined
+  }, [sound])
+
   return (
     <View
       sx={{ flex: 1, justifyContent: 'center', alignItems: 'center', p: 16 }}
     >
-      <H1 sx={{ fontWeight: '800' }}>Welcome to Solito.</H1>
+      <PrimaryButton>Start The Quiz</PrimaryButton>
+      <Button title="Play Sound" onPress={playSound} />
+
+      {/* <H1 sx={{ fontWeight: '800' }}>Welcome to Solito.</H1>
       <View sx={{ maxWidth: 600 }}>
         <P sx={{ textAlign: 'center' }}>
           Here is a basic starter to show you how you can navigate from one
@@ -65,7 +90,7 @@ export function HomeScreen() {
             Moti Link
           </Text>
         </MotiLink>
-      </Row>
+      </Row> */}
     </View>
   )
 }
