@@ -1,6 +1,11 @@
 import { DripsyProvider, makeTheme } from 'dripsy'
 
 const theme = makeTheme({
+  colors: {
+    $text: 'rgba(255, 255, 255, 1)',
+    $background: 'rgba(10, 7, 16, 1)',
+    $primary: 'tomato',
+  },
   // https://www.dripsy.xyz/usage/theming/create
   text: {
     p: {
