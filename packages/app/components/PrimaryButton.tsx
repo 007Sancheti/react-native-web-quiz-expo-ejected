@@ -3,17 +3,22 @@ import React from 'react'
 import { MotiPressable, MotiPressableProps } from 'moti/interactions'
 import { GradientHelper } from '../helpers/GradientHelper'
 import { Animated } from 'react-native'
+import CrossSvg from 'app/assets/icons/red_cross.svg'
+import TickSvg from 'app/assets/icons/icon_tick.svg'
+import { MotiView } from 'moti'
 
 type PrimaryButtonProps = MotiPressableProps & {
   children: React.ReactNode
   buttonStyle?: SxProp
   gradientColor1?: string
   gradientColor2?: string
+  animating?: string
 }
 
 const AnimatedGradientHelper = Animated.createAnimatedComponent(GradientHelper)
 
 const PrimaryButton = ({
+  animating,
   children,
   gradientColor1 = '#BA58E8',
   gradientColor2 = '#6258E8',
@@ -75,6 +80,56 @@ const PrimaryButton = ({
           alignItems: 'center',
         })}
       >
+        {animating === 'correct' && (
+          <MotiView
+            key="correct"
+            from={{
+              top: 0,
+              opacity: 1,
+            }}
+            animate={{
+              top: -100,
+              opacity: 0,
+            }}
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              position: 'absolute',
+              zIndex: 2,
+            }}
+            transition={{
+              type: 'timing',
+              duration: 1000,
+            }}
+          >
+            <TickSvg />
+          </MotiView>
+        )}
+        {animating === 'incorrect' && (
+          <MotiView
+            key="incorrect"
+            from={{
+              top: 0,
+              opacity: 1,
+            }}
+            animate={{
+              top: -100,
+              opacity: 0,
+            }}
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              position: 'absolute',
+              zIndex: 2,
+            }}
+            transition={{
+              type: 'timing',
+              duration: 1000,
+            }}
+          >
+            <CrossSvg />
+          </MotiView>
+        )}
         <Text
           sx={{
             color: 'white',

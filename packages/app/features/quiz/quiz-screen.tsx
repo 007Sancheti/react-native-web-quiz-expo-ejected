@@ -1,5 +1,5 @@
 import PrimaryButton from 'app/components/PrimaryButton'
-import { useSx, View, Text } from 'dripsy'
+import { useSx, View, Text, Image } from 'dripsy'
 import { Audio } from 'expo-av'
 import { useEffect, useState } from 'react'
 import { useQuery, useMutation } from 'react-query'
@@ -10,13 +10,13 @@ import {
 } from 'app/api/quizService'
 import { decryptData } from 'app/utils/decryptData'
 import Loader from 'app/components/Loader/Loader'
-import { Image } from 'react-native';
 
 export function QuizScreen() {
   const [totalPoints, setTotalPoints] = useState(0)
   const [selectedAns, setSelectedAns] = useState('')
   const [quesIndex, setQuesIndex] = useState(0)
   const [sound, setSound] = useState()
+  const [animating, setAnimating] = useState(['', ''])
   const sx = useSx()
   const { data: quizData, isLoading: quizLoading } = useQuery(
     ['getRandomQuesByQuizId'],
@@ -63,13 +63,19 @@ export function QuizScreen() {
   const getCorrectAnswer = () =>
     decryptData(quizQuestionDetailsList[quesIndex].correctOption, celebUserId)
 
-  const handleClickAnswer = (ans) => {
+  const handleClickAnswer = (ans, index) => {
+    let animatingArr = [...animating]
     let correctAns = getCorrectAnswer()
     if (ans === correctAns) {
-      playCorrectSound();
+      animatingArr[index] = 'correct'
+      setAnimating(animatingArr)
+      playCorrectSound()
       setTotalPoints(totalPoints + 1)
     } else {
-      playIncorrectSound();
+      animatingArr[index] = 'incorrect'
+      setAnimating(animatingArr)
+      
+      playIncorrectSound()
     }
     handleSubmitQuestions(ans)
     setSelectedAns(ans)
@@ -77,7 +83,9 @@ export function QuizScreen() {
       setTimeout(() => {
         setQuesIndex(quesIndex + 1)
         setSelectedAns('')
-      }, 300)
+        animatingArr[index] = ''
+        setAnimating(() => [...animatingArr])
+      }, 1000)
     }
   }
 
@@ -94,7 +102,7 @@ export function QuizScreen() {
       <View
         sx={{
           flex: 1,
-          backgroundColor: ['$background'],
+          backgroundColor: '$background',
         }}
       >
         <Loader />
@@ -105,7 +113,7 @@ export function QuizScreen() {
     <View
       sx={{
         flex: 1,
-        backgroundColor: ['$background'],
+        backgroundColor: '$background',
         alignItems: 'center',
       }}
     >
@@ -154,9 +162,12 @@ export function QuizScreen() {
             }}
           >
             <PrimaryButton
+              disabled={!!selectedAns}
+              key={'button-1'}
+              animating={animating[0]}
               buttonStyle={{ mb: 10 }}
               onPress={() => {
-                handleClickAnswer(options[0].optionKey)
+                handleClickAnswer(options[0].optionKey, 0)
               }}
               gradientColor1={
                 selectedAns === options?.[0].optionKey
@@ -176,6 +187,9 @@ export function QuizScreen() {
               {decryptData(options?.[0].optionValue, celebUserId)}
             </PrimaryButton>
             <PrimaryButton
+              disabled={!!selectedAns}
+              animating={animating[1]}
+              key={'button-2'}
               gradientColor1={
                 selectedAns === options?.[1].optionKey
                   ? options[1].optionKey === getCorrectAnswer()
@@ -191,7 +205,7 @@ export function QuizScreen() {
                   : '#6258E8'
               }
               onPress={() => {
-                handleClickAnswer(options[1].optionKey)
+                handleClickAnswer(options[1].optionKey, 1)
               }}
             >
               {decryptData(options?.[1].optionValue, celebUserId)}

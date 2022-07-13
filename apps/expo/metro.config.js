@@ -1,19 +1,31 @@
-// Learn more https://docs.expo.io/guides/customizing-metro
-/**
- * @type {import('expo/metro-config')}
- */
-const { getDefaultConfig } = require('expo/metro-config')
+const { getDefaultConfig } = require("metro-config");
 const path = require('path')
 
 const projectRoot = __dirname
-const workspaceRoot = path.resolve(__dirname, '../..')
 
-const config = getDefaultConfig(projectRoot)
-
-config.watchFolders = [workspaceRoot]
-config.resolver.nodeModulesPaths = [
-  path.resolve(projectRoot, 'node_modules'),
-  path.resolve(workspaceRoot, 'node_modules'),
-]
-
-module.exports = config
+module.exports = (async () => {
+  const workspaceRoot = path.resolve(__dirname, '../..')
+  const {
+    resolver: { sourceExts, assetExts }
+  } = await getDefaultConfig(projectRoot);
+  return {
+    watchFolders: [workspaceRoot],
+    transformer: {
+      getTransformOptions: async () => ({
+        transform: {
+          experimentalImportSupport: false,
+          inlineRequires: false
+        }
+      }),
+      babelTransformerPath: require.resolve("react-native-svg-transformer")
+    },
+    resolver: {
+      assetExts: assetExts.filter(ext => ext !== "svg"),
+      sourceExts: [...sourceExts, "svg"],
+      nodeModulesPaths: [
+        path.resolve(projectRoot, 'node_modules'),
+        path.resolve(workspaceRoot, 'node_modules'),
+      ]
+    }
+  };
+})();

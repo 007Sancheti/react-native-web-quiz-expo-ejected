@@ -1,6 +1,14 @@
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import * as Linking from 'expo-linking'
 import { useMemo } from 'react'
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'rgba(10, 7, 16, 1)',
+  },
+}
 
 export function NavigationProvider({
   children,
@@ -9,6 +17,7 @@ export function NavigationProvider({
 }) {
   return (
     <NavigationContainer
+      theme={MyTheme}
       linking={useMemo(
         () => ({
           prefixes: [Linking.createURL('/')],
@@ -17,7 +26,7 @@ export function NavigationProvider({
             screens: {
               home: '',
               'quiz-start': 'quiz-start',
-              'quiz': 'quiz'
+              quiz: 'quiz',
             },
           },
         }),
