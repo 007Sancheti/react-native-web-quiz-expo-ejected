@@ -1,13 +1,15 @@
 {
   "expo": {
-    "name": "solito-blank",
-    "slug": "solito-blank",
+    "name": "TrueFan",
+    "slug": "truefan",
     "version": "1.0.0",
-    "sdkVersion": "44.0.0",
-    "scheme": "solito-blank",
-    "platforms": ["ios", "android"],
+    "scheme": "truefan",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "ios": {
-      "bundleIdentifier": "com.solito.blank"
+      "bundleIdentifier": "com.truefan.user.live"
     },
     "packagerOpts": {
       "config": "metro.config.js",
@@ -24,6 +26,9 @@
         "wasm",
         "svg"
       ]
+    },
+    "android": {
+      "package": "com.truefan.user.live"
     }
   }
 }
