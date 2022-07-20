@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { userLogin } from 'app/api/authService'
 
 export function QuizStartScreen({ navigation }) {
-
   useEffect(() => {
     userLogin({
       mobileNumber: '8010369252',
@@ -17,6 +16,30 @@ export function QuizStartScreen({ navigation }) {
     >
       <PrimaryButtonLink href="/quiz" as="/quiz">
         Start The Quiz
+      </PrimaryButtonLink>
+      <PrimaryButtonLink
+        href="/how-is-this-video-made"
+        as="/how-is-this-video-made"
+      >
+        How is this video made
+      </PrimaryButtonLink>
+      <PrimaryButtonLink href="/trusted-by" as="/trusted-by">
+        Trusted By
+      </PrimaryButtonLink>
+      <PrimaryButtonLink href="/welcome" as="/welcome">
+        Welcome
+      </PrimaryButtonLink>
+      <PrimaryButtonLink href="/welcome-to-truefan" as="/welcome-to-truefan">
+        Welcome to truefan
+      </PrimaryButtonLink>
+      <PrimaryButtonLink href="/video-for" as="/video-for">
+        Who is this Video Message For
+      </PrimaryButtonLink>
+      <PrimaryButtonLink href="/send-via-whatsapp" as="/send-via-whatsapp">
+      We will send your Video Via WhatsApp
+      </PrimaryButtonLink>
+      <PrimaryButtonLink href="/we-are-sure" as="/we-are-sure">
+      We are sure Devika will Love It
       </PrimaryButtonLink>
 
       {/* <Button title="Play Sound" onPress={playSound} /> */}
